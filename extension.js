@@ -18,27 +18,25 @@ export default class Istighfar extends Extension {
         this.duration = null;
         this.THEME = false;
         this.counter = 0;
-        this.click = false;
+        this.durationHandler = null;
+        this.hideHandler = null;
+        this.darkModeHandler = null;
     }
     
     enable() {
         this.flag = true;
-        this.settings = new Gio.Settings({ schema_id: 'istighfar@islamic.dikra.lazaal' });
+        this.settings = new Gio.Settings({ schema_id: 'org.gnome.shell.extensions.istighfar' });
         this.duration = this.settings.get_int("duration") * 1000 * 60;  
         
-        this.settings.connect('changed::duration', () => {
+        this.durationHandler = this.settings.connect('changed::duration', () => {
             this.duration = this.settings.get_int("duration") * 1000 * 60;
             this._startButtonPeriodic()
-            // log(`===> NEW duration : ${this.duration / 1000}s`)
         });
 
-        this.settings.connect("changed::dark-mode", () => {
+        this.darkModeHandler = this.settings.connect("changed::dark-mode", () => {
             this.THEME = this.settings.get_boolean("dark-mode");
-            // log(`===> DARK THEME : ${this.THEME}`)
         });
         
-        // loading sentences
-        // const jsonPath = GLib.build_filenamev([this.path, "sentences.json"]);
         let sentences = loadJSONFile(this.path);
         if (sentences) {
             if (sentences.length == 0) {
@@ -53,26 +51,39 @@ export default class Istighfar extends Extension {
     }
 
     disable() {
-        if (this.button) {
-            this.button.label = ''
-            this.button.destroy();
-            this.button = null;
+        if (this.hideHandler){
+            this.button.disconnect(this.hideHandler);
+            this.hideHandler = null;
         }
+
+        if (this.durationHandler) {
+            this.settings.disconnect(this.durationHandler);
+            this.durationHandler = null;
+        }
+        
+        if (this.darkModeHandler){
+            this.settings.disconnect(this.darkModeHandler);
+            this.darkModeHandler = null;
+        }
+
         if (this.flag) {
             this.flag = false;
         }
         
-        // Ensure any pending timeout is cleared
         if (this.timeoutId !== null) {
             GLib.source_remove(this.timeoutId);
             this.timeoutId = null;
+        }
+        
+        if (this.button) {    
+            this.button.destroy();
+            this.button = null;
         }
     }
     
     _startButtonPeriodic() {
         if (this.timeoutId !== null) {
             try {
-                // log("=====> NOTE: trying to remove resource from startButtonPerodic()::if()")
                 GLib.source_remove(this.timeoutId);
                 this.timeoutId = null;
             } catch (e) {
@@ -80,7 +91,6 @@ export default class Istighfar extends Extension {
             }
         }
         this.timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT,this.duration,()=>{            
-            // log(`==> in startButtonPeriodic the flag is ${this.duration}`)
             this._createButton();
             return GLib.SOURCE_CONTINUE  ;
         })
@@ -110,15 +120,12 @@ export default class Istighfar extends Extension {
         });
         
         
-        this.button.connect('button-press-event', () => {
+        this.hideHandler = this.button.connect('button-press-event', () => {
             this._hideButton();
          });
 
         Main.layoutManager.uiGroup.add_child(this.button);
         this.button.set_position(monitor.width - (this.button.width - 1) / 2  , Math.min(Math.floor( this.button.height * 3,monitor.height / 6)));
-
-        // log(`====> BUTTON HEIGHT: ${this.button.height }`); // 35
-        // log(`====> BUTTON WIDTH: ${this.button.width}`); // 228 
 
         // Animate sliding in
         this.button.ease({
@@ -134,22 +141,20 @@ export default class Istighfar extends Extension {
         });
         this.counter = (this.counter + 1) % this.sentences.length ;
 
-        // log(`======> COUNTER: ${this.counter}`);
-        // log(`======> SENTENCE LENGTH: ${sentence.length}`);
     }
 
     _hideButton() {
         
         if (!this.button) return;
-        let buttonRef = this.button; // Preserve reference
-        this.button = null; // Nullify first to prevent duplicate calls
+        let buttonRef = this.button;
+        this.button = null;
 
         buttonRef.ease({
             translation_x: Math.floor(buttonRef.width / 2 ) + 10, 
             duration: 500,
             mode: Clutter.AnimationMode.EASE_IN_QUAD,
             onComplete: () => {
-                buttonRef.destroy(); // Destroy safely after animation
+                buttonRef.destroy(); 
             },
         });
     }
@@ -159,21 +164,19 @@ function loadJSONFile(path) {
     try {
         const filePath = GLib.build_filenamev([
         GLib.get_user_data_dir(), // ~/.local/share
-        'istighfar',              // Subdirectory for your extension
-        'sentences.json',  // JSON file name
+        'istighfar',              // Subdirectory for the extension
+        'sentences.json',  
     ]);
         
         let  file = Gio.File.new_for_path(filePath);
         let [success, contents] = file.load_contents(null);
         if (success) {
             let text = new TextDecoder().decode(contents);
-            // log("JSON LOADED FROM .local");
-            
-            return JSON.parse(text);  // Parse JSON
+            return JSON.parse(text);  
         }
     } catch (e) {
     try {
-        log(`Error loading JSON file from .local/share ${e}`);
+        log(`Error loading JSON file from .local/share/extensions/ ${e}`);
         // log(`loading from default file`);
         const filePath = GLib.build_filenamev([path, "default.json"]);
         let  file = Gio.File.new_for_path(filePath);

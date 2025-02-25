@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="istighfar@islamic.dikra.lazaal" path="/org/gnome/shell/extensions/istighfar/">
+  <schema id="org.gnome.shell.extensions.istighfar" path="/org/gnome/shell/extensions/istighfar/">
     <key name="duration" type="i">
       <default>15</default>
       <summary>Waiting duration</summary>
