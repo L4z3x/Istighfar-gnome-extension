@@ -22,11 +22,7 @@
     color: aliceblue;
     background-color:#3b3b3b ;
 }
-@font-face {
-    font-family: 'Kufi';
-    src: url('./fonts/NotoKufiArabic-Regular.ttf') format('truetype');
-    font-style: normal;
-}
+
 @font-face {
     font-family: 'Kufi-meduim';
     src: url('./fonts/NotoKufiArabic-Medium.ttf') format('truetype');
