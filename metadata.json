@@ -6,7 +6,7 @@
     "47"
   ],
   "preferenes":"prefs.js",
-  "settings-schema":"istighfar@islamic.dikra.lazaal",
+  "settings-schema":"org.gnome.shell.extensions.istighfar",
   "gettext-domain": "istighfar@islamic.dikra.lazaal",
   "url":"https://github.com/L4z3x/Istighfar-gnome-extension"
 }
