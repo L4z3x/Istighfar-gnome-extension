@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="istighfar@islamic.dikra.lazaal" path="/org/gnome/shell/extensions/istighfar/">
+    <key name="duration" type="i">
+      <default>15</default>
+      <summary>Waiting duration</summary>
+      <description>Time (in minutes) before the next sentence.</description>
+    </key>
+    <!-- <key name="button-duration" type="i">
+      <default>5</default>
+      <summary>Display duration</summary>
+      <description>How long (in seconds) the button stays visible before sliding out.</description>
+    </key> -->
+    <key name="dark-mode" type="b">
+      <default>false</default>
+      <summary>button theme</summary>
+      <description>choose whether the button is in dark-mode or not.</description>
+    </key>
+  </schema>
+</schemalist>

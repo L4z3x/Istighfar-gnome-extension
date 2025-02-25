@@ -1,0 +1,34 @@
+/* Add your custom extension styling here */
+.slide-button {
+    background-color: #2e3436;
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    text-align: center;
+    padding: 15px;
+    justify-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    font-size: 23px;
+    font-weight: 700;
+    font-family: 'Kufi-meduim';
+}
+.slide-button.show {
+    background-color: rgb(246, 245, 244);
+    color: #3b3b3b;
+}
+
+.slide-button.dark {
+    color: aliceblue;
+    background-color:#3b3b3b ;
+}
+@font-face {
+    font-family: 'Kufi';
+    src: url('./fonts/NotoKufiArabic-Regular.ttf') format('truetype');
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Kufi-meduim';
+    src: url('./fonts/NotoKufiArabic-Medium.ttf') format('truetype');
+    font-style: normal;
+}
