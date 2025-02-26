@@ -26,6 +26,7 @@ export default class Istighfar extends Extension {
     enable() {
         this.flag = true;
         this.settings = new Gio.Settings({ schema_id: 'org.gnome.shell.extensions.istighfar' });
+        
         this.duration = this.settings.get_int("duration") * 1000 * 60;  
         
         this.durationHandler = this.settings.connect('changed::duration', () => {
@@ -51,17 +52,17 @@ export default class Istighfar extends Extension {
     }
 
     disable() {
-        if (this.hideHandler){
+        if (this.hideHandler && this.button ){
             this.button.disconnect(this.hideHandler);
             this.hideHandler = null;
         }
 
-        if (this.durationHandler) {
+        if (this.durationHandler  && this.settings ) {
             this.settings.disconnect(this.durationHandler);
             this.durationHandler = null;
         }
         
-        if (this.darkModeHandler){
+        if (this.darkModeHandler && this.settings){
             this.settings.disconnect(this.darkModeHandler);
             this.darkModeHandler = null;
         }
