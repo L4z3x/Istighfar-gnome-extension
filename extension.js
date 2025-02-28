@@ -14,7 +14,7 @@ export default class Istighfar extends Extension {
         super(metadata);
         this.button = null;
         this.timeoutId = null;
-        this.flag = false;
+        this.HidetimeoutId = null;
         this.duration = null;
         this.THEME = false;
         this.counter = 0;
@@ -24,7 +24,6 @@ export default class Istighfar extends Extension {
     }
     
     enable() {
-        this.flag = true;
         this.settings = new Gio.Settings({ schema_id: 'org.gnome.shell.extensions.istighfar' });
         
         this.duration = this.settings.get_int("duration") * 1000 * 60;  
@@ -66,30 +65,31 @@ export default class Istighfar extends Extension {
             this.settings.disconnect(this.darkModeHandler);
             this.darkModeHandler = null;
         }
-
-        if (this.flag) {
-            this.flag = false;
+        if (this.settings) {
+            this.settings = null;
         }
-        
-        if (this.timeoutId !== null) {
+
+        if (this.timeoutId) {
             GLib.source_remove(this.timeoutId);
             this.timeoutId = null;
         }
-        
+        if (this.HidetimeoutId) {
+            GLib.source_remove(this.HidetimeoutId);
+            this.HidetimeoutId = null;
+        }
+
         if (this.button) {    
             this.button.destroy();
             this.button = null;
         }
+
     }
     
     _startButtonPeriodic() {
-        if (this.timeoutId !== null) {
-            try {
-                GLib.source_remove(this.timeoutId);
-                this.timeoutId = null;
-            } catch (e) {
-                log(`========> ERROR: ${e}`);
-            }
+        
+        if (this.timeoutId) {
+            GLib.source_remove(this.timeoutId);
+            this.timeoutId = null;
         }
         this.timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT,this.duration,()=>{            
             this._createButton();
@@ -99,6 +99,7 @@ export default class Istighfar extends Extension {
         
     _createButton() {
         if (this.button) return;
+        
         
         // Position the button initially off-screen
         const monitor = Main.layoutManager.primaryMonitor;
@@ -136,7 +137,7 @@ export default class Istighfar extends Extension {
         });
 
         // Hide after 5s unless clicked
-        GLib.timeout_add(GLib.PRIORITY_DEFAULT, 5000, () => {
+        this.HidetimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 5000, () => {
             this._hideButton();
             return GLib.SOURCE_REMOVE;
         });
@@ -156,6 +157,7 @@ export default class Istighfar extends Extension {
             mode: Clutter.AnimationMode.EASE_IN_QUAD,
             onComplete: () => {
                 buttonRef.destroy(); 
+
             },
         });
     }
@@ -164,33 +166,36 @@ export default class Istighfar extends Extension {
 function loadJSONFile(path) {
     try {
         const filePath = GLib.build_filenamev([
+        
         GLib.get_user_data_dir(), // ~/.local/share
         'istighfar',              // Subdirectory for the extension
         'sentences.json',  
-    ]);
+        ]);
         
         let  file = Gio.File.new_for_path(filePath);
+        
         let [success, contents] = file.load_contents(null);
+        
         if (success) {
             let text = new TextDecoder().decode(contents);
             return JSON.parse(text);  
         }
+
     } catch (e) {
-    try {
-        log(`Error loading JSON file from .local/share/extensions/ ${e}`);
-        // log(`loading from default file`);
-        const filePath = GLib.build_filenamev([path, "default.json"]);
-        let  file = Gio.File.new_for_path(filePath);
-        let [success, contents] = file.load_contents(null);
-        if (success) {
-            // log("JSON LOADED FROM default");
-            let text = new TextDecoder().decode(contents);
-            return JSON.parse(text);  // Parse JSON
-        }
-    } catch(e) {
-            log(`ERROR FINDING default.json |> ${e}`)
+        try {
+            console.log(`Error loading JSON file from .local/share/extensions/ ${e}`);
+            console.log(`loading from default file`);
+            const filePath = GLib.build_filenamev([path, "default.json"]);
+            let  file = Gio.File.new_for_path(filePath);
+            let [success, contents] = file.load_contents(null);
+            if (success) {
+                let text = new TextDecoder().decode(contents);
+                return JSON.parse(text);  // Parse JSON
+            }
+        } catch(e) {
+            console.log(`ERROR FINDING default.json : ${e}`)
         }
     
-    return null;
-}
+        return null;
+    }
 }

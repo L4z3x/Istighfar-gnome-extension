@@ -88,20 +88,16 @@ export default class IstighfarPrefs extends ExtensionPreferences {
             GLib.get_user_data_dir(),
             'istighfar',
         ]);
+        
         const dirFile = Gio.File.new_for_path(jsonDir);
         if (!dirFile.query_exists(null)) {
             dirFile.make_directory_with_parents(null); // Create the directory
         }
 
-        
-
-
         // Create the file if it doesn't exist
         const file = Gio.File.new_for_path(jsonFilePath);
         
         const defaultData = this._loadDefaultFile();
-
-
 
         if (!file.query_exists(null)) {
             const contents = new GLib.Bytes(new TextEncoder().encode([defaultData]));
@@ -120,13 +116,13 @@ export default class IstighfarPrefs extends ExtensionPreferences {
         launcher.launch(null, null, null);
     }
     _loadDefaultFile(){
-     const filePath = GLib.build_filenamev([this.path, "default.json"]);
-    const  defFile = Gio.File.new_for_path(filePath);
-    const [success, contents] = defFile.load_contents(null);
-    if (success) {
-        log("JSON LOADED FROM default");
-        let text = new TextDecoder().decode(contents);
-        return text;  // Parse JSON
-    }   
+        const filePath = GLib.build_filenamev([this.path, "default.json"]);
+        const  defFile = Gio.File.new_for_path(filePath);
+        const [success, contents] = defFile.load_contents(null);
+        if (success) {
+            log("JSON LOADED FROM default");
+            let text = new TextDecoder().decode(contents);
+            return text;  // Parse JSON
+        }   
     }
 }

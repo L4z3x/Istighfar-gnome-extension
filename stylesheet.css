@@ -1,4 +1,10 @@
-/* Add your custom extension styling here */
+@font-face {
+    font-family: 'Kufi-meduim';
+    src: url('./assets/font/NotoKufiArabic-Medium.ttf');
+    font-display: swap;
+}
+
+
 .slide-button {
     background-color: #2e3436;
     display: flex;
@@ -21,10 +27,4 @@
 .slide-button.dark {
     color: aliceblue;
     background-color:#3b3b3b ;
-}
-
-@font-face {
-    font-family: 'Kufi-meduim';
-    src: url('./fonts/NotoKufiArabic-Medium.ttf') format('truetype');
-    font-style: normal;
 }
