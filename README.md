@@ -44,7 +44,7 @@ run the install.sh script:
 ```
 reload gnome-shell by pressing Alt+f2 then typing 'r' or simply logout and login.
 ## Doesn't look good on your screen:
-open stylesheet.css and adjust font-size value (line 18) and then reload te gnome-shell by loging out
+open stylesheet.css and adjust font-size value (line 18) and then reload te gnome-shell by logging out
 ```
   cd "$HOME/.local/share/gnome-shell/extensions/istighfar@islamic.dikra.lazaal"
   nano stylesheet.css
