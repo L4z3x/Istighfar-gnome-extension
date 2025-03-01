@@ -43,5 +43,10 @@ run the install.sh script:
   ./install.sh
 ```
 reload gnome-shell by pressing Alt+f2 then typing 'r' or simply logout and login.
-
+## Doesn't look good on your screen:
+open stylesheet.css and adjust font-size value (line 18) and then reload te gnome-shell by loging out
+```
+  cd "$HOME/.local/share/gnome-shell/extensions/istighfar@islamic.dikra.lazaal"
+  nano stylesheet.css
+```
 ## give this repo a star if you enjoyed this extension
