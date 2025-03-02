@@ -3,7 +3,7 @@
   "description": "get periodic istighfar reminders",
   "uuid": "istighfar@islamic.dikra.lazaal",
   "shell-version": [
-    "47"
+    "48","47","46"
   ],
   "settings-schema":"org.gnome.shell.extensions.istighfar",
   "gettext-domain": "istighfar@islamic.dikra.lazaal",
