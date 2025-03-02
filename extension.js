@@ -28,6 +28,8 @@ export default class Istighfar extends Extension {
         
         this.duration = this.settings.get_int("duration") * 1000 * 60;  
         
+        this.THEME = this.settings.get_boolean("dark-mode");
+
         this.durationHandler = this.settings.connect('changed::duration', () => {
             this.duration = this.settings.get_int("duration") * 1000 * 60;
             this._startButtonPeriodic()
@@ -109,6 +111,7 @@ export default class Istighfar extends Extension {
         sentence = this.sentences[this.counter];
         
         if (!sentence){
+            // setting a default sentence
             sentence ="استغفر الله و أتوب إليه";
         }
 

@@ -11,26 +11,26 @@ A GNOME Shell extension that provides customizable Istighfar reminders. This ext
 
 
 ## How does it look:
-<img src="assets/images/popup-1.png" justify-content="center">
-<img src="assets/images/popup-2.png" justify-content="center">
+<img src="images/popup-1.png" justify-content="center">
+<img src="images/popup-2.png" justify-content="center">
 
 ### settings:
 
-<img src="assets/images/settings.png" justify-content="center">
+<img src="images/settings.png" justify-content="center">
 
 ### editing the sentences.json file:
 
-<img src="assets/images/editing-json.png" justify-content="center">
+<img src="images/editing-json.png" justify-content="center">
 
 ## How to install
 
 ### Install from extensions.gnome.org (Recommended)
 
-[<img src="assets/images/ego.png" height="100">](https://extensions.gnome.org/extension/7902/istighfar/)
+[<img src="images/ego.png" height="100">](https://extensions.gnome.org/extension/7902/istighfar/)
 
 you can use extensions-manager:
 
-[<img src="assets/images/extensions-manager.png">](https://github.com/mjakeman/extension-manager)
+[<img src="images/extensions-manager.png">](https://github.com/mjakeman/extension-manager)
 
 ### Manual installation
 clone this repo:
