@@ -24,7 +24,7 @@ export default class Istighfar extends Extension {
     }
     
     enable() {
-        this.settings = new Gio.Settings({ schema_id: 'org.gnome.shell.extensions.istighfar' });
+        this.settings = this.getSettings();
         
         this.duration = this.settings.get_int("duration") * 1000 * 60;  
         
@@ -140,6 +140,11 @@ export default class Istighfar extends Extension {
         });
 
         // Hide after 5s unless clicked
+        if (this.HidetimeoutId){
+            GLib.source_remove(this.HidetimeoutId);
+            this.HidetimeoutId = null;
+        }
+      
         this.HidetimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 5000, () => {
             this._hideButton();
             return GLib.SOURCE_REMOVE;
@@ -188,7 +193,7 @@ function loadJSONFile(path) {
         try {
             console.log(`Error loading JSON file from .local/share/extensions/ ${e}`);
             console.log(`loading from default file`);
-            const filePath = GLib.build_filenamev([path, "default.json"]);
+            const filePath = GLib.build_filenamev([path, "assets/default.json"]);
             let  file = Gio.File.new_for_path(filePath);
             let [success, contents] = file.load_contents(null);
             if (success) {
@@ -196,9 +201,9 @@ function loadJSONFile(path) {
                 return JSON.parse(text);  // Parse JSON
             }
         } catch(e) {
-            console.log(`ERROR FINDING default.json : ${e}`)
+            console.log(`ERROR FINDING assets/default.json : ${e}`)
         }
     
-        return null;
+        return [];
     }
 }

@@ -116,7 +116,7 @@ export default class IstighfarPrefs extends ExtensionPreferences {
         launcher.launch(null, null, null);
     }
     _loadDefaultFile(){
-        const filePath = GLib.build_filenamev([this.path, "default.json"]);
+        const filePath = GLib.build_filenamev([this.path, "assets/default.json"]);
         const  defFile = Gio.File.new_for_path(filePath);
         const [success, contents] = defFile.load_contents(null);
         if (success) {
